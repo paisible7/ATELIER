@@ -9,7 +9,7 @@ import java.io.*;
 import java.nio.file.*;
 
 public class JsonManager {
-    private static final String FILE_PATH = "produits.json";
+    private static final String FILE_PATH = "./src/main/java/resources/donnees.json";
 
     public static void sauvegarderProduits(List<Produit> produits) {
         JSONArray jsonArray = new JSONArray();
