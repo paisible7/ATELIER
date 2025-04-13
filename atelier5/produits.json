@@ -1,9 +1,9 @@
 [{
-    "prix": 12,
+    "prix": 1200,
     "dateExpiration": "2025",
     "id": 1,
     "origine": "rdc",
     "type": "alimentaire",
-    "nom": "Pomme",
-    "quantite": 30
+    "nom": "tomate",
+    "quantite": 34
 }]

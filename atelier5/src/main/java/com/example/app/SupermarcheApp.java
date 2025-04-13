@@ -1,5 +1,6 @@
 package com.example.app;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -69,6 +70,10 @@ public class SupermarcheApp {
     }
 
     private static void ajouterProduit() {
+
+        try{
+
+
         System.out.print("Entrez l'ID du produit : ");
         int id = scanner.nextInt();
         scanner.nextLine(); 
@@ -95,9 +100,9 @@ public class SupermarcheApp {
             case "ménager":
                 System.out.print("Entrez le type : ");
                 String typeMenager = scanner.nextLine();
-                System.out.print("Entrez la dangerosité : ");
-                String dangerosite = scanner.nextLine();
-                produit = new ProduitMenager(id, nom, prix, quantite, typeMenager, dangerosite);
+                System.out.print("Entrez la date de fabrication : ");
+                String dateFabrication = scanner.nextLine();
+                produit = new ProduitMenager(id, nom, prix, quantite, typeMenager, dateFabrication);
                 break;
             case "cosmétique":
                 System.out.print("Entrez le type de peau : ");
@@ -112,7 +117,12 @@ public class SupermarcheApp {
         }
         produits.add(produit);
         System.out.println("Produit ajouté avec succès !");
+    }catch(InputMismatchException e){
+        System.out.println("Erreur : entrée invalide. veuillez réessayer");
+        scanner.nextLine();
     }
+    }
+    
 
     private static void afficherProduits() {
         if (produits.isEmpty()) {
@@ -129,26 +139,47 @@ public class SupermarcheApp {
         System.out.print("Entrez l'ID du produit à modifier : ");
         int id = scanner.nextInt();
         scanner.nextLine(); 
+        boolean produitTrouve = false;
         for (Produit produit : produits) {
             if (produit.id == id) {
+                produitTrouve = true;
                 System.out.print("Entrez le nouveau nom : ");
                 produit.nom = scanner.nextLine();
                 System.out.print("Entrez le nouveau prix : ");
                 produit.prix = scanner.nextDouble();
+                if (produit.prix < 0) {
+                    System.out.println("le prix ne peut pas etre negatif");
+                    return;
+                }
+                produit.setPrix(produit.prix);
                 System.out.print("Entrez la nouvelle quantité : ");
                 produit.quantite = scanner.nextInt();
+                if (produit.quantite < 0) {
+                    System.out.println("La quantité ne peut pas être négative.");
+                    return;
+                }
+                produit.setQuantite(produit.quantite);
                 System.out.println("Produit modifié avec succès !");
                 return;
             }
         }
-        System.out.println("Produit non trouvé.");
+        if (!produitTrouve) {
+            System.out.println("Produit non trouvé.");
+        }
     }
 
     private static void supprimerProduit() {
         System.out.print("Entrez l'ID du produit à supprimer : ");
         int id = scanner.nextInt();
-        produits.removeIf(produit -> produit.id == id);
-        System.out.println("Produit supprimé avec succès !");
+        boolean produitSupprime = produits.removeIf(produit -> produit.getId() == id);
+
+        if(produitSupprime){
+            System.out.println("produit supprimé avec succès !");
+        }
+        else {
+            System.out.println("Produit noon trouvé");
+        }
+        
     }
 }
 
