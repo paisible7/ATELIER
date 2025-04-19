@@ -1,38 +1,9 @@
-[
-    {
-        "prix": 1200,
-        "dateExpiration": "2025",
-        "id": 1,
-        "origine": "rdc",
-        "type": "alimentaire",
-        "nom": "tomate",
-        "quantite": 34
-    },
-    {
-        "prix": 23,
-        "dateExpiration": "2025",
-        "id": 3,
-        "origine": "rdc",
-        "type": "alimentaire",
-        "nom": "lotion",
-        "quantite": 123
-    },
-    {
-        "prix": 3005,
-        "dateFabrication": "2023",
-        "typeProduit": "lotion",
-        "id": 4,
-        "type": "menager",
-        "nom": "trompy",
-        "quantite": 300
-    },
-    {
-        "prix": 222,
-        "testeSurAnimaux": true,
-        "id": 5,
-        "type": "cosmetique",
-        "nom": "eaaaa",
-        "typePeau": "noire",
-        "quantite": 12
-    }
-]
+[{
+    "prix": 1500,
+    "dateExpiration": "2026",
+    "id": 5,
+    "origine": "rdc",
+    "type": "alimentaire",
+    "nom": "biscuit",
+    "quantite": 40
+}]

@@ -12,7 +12,7 @@ import java.util.List;
 public class DatabaseManager {
     private static final String URL = "jdbc:mysql://localhost:3306/supermarche";
     private static final String USER = "root";
-    private static final String PASSWORD = "admin123mdp";
+    private static final String PASSWORD = "";
 
     private static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
@@ -100,7 +100,9 @@ public class DatabaseManager {
     }
 
     private static void setTypeSpecificParameters(PreparedStatement pstmt, Produit produit) throws SQLException {
-        if (produit instanceof ProduitAlimentaire pa) {
+        if (produit instanceof ProduitAlimentaire) {
+            ProduitAlimentaire pa = (ProduitAlimentaire) produit;
+            
             pstmt.setString(5, "alimentaire");
             pstmt.setString(6, pa.getDateExpiration());
             pstmt.setString(7, pa.getOrigine());
@@ -108,7 +110,8 @@ public class DatabaseManager {
             pstmt.setNull(9, Types.VARCHAR);
             pstmt.setNull(10, Types.VARCHAR);
             pstmt.setNull(11, Types.BOOLEAN);
-        } else if (produit instanceof ProduitMenager pm) {
+        } else if (produit instanceof ProduitMenager) {
+            ProduitMenager pm = (ProduitMenager) produit;
             pstmt.setString(5, "ménager");
             pstmt.setNull(6, Types.VARCHAR);
             pstmt.setNull(7, Types.VARCHAR);
@@ -116,7 +119,8 @@ public class DatabaseManager {
             pstmt.setString(9, pm.getDateFabrication());
             pstmt.setNull(10, Types.VARCHAR);
             pstmt.setNull(11, Types.BOOLEAN);
-        } else if (produit instanceof ProduitCosmetique pc) {
+        } else if (produit instanceof ProduitCosmetique) {
+            ProduitCosmetique pc = (ProduitCosmetique) produit;
             pstmt.setString(5, "cosmétique");
             pstmt.setNull(6, Types.VARCHAR);
             pstmt.setNull(7, Types.VARCHAR);
@@ -147,21 +151,24 @@ public class DatabaseManager {
         pstmt.setDouble(2, produit.getPrix());
         pstmt.setInt(3, produit.getQuantite());
 
-        if (produit instanceof ProduitAlimentaire pa) {
+        if (produit instanceof ProduitAlimentaire) {
+            ProduitAlimentaire pa = (ProduitAlimentaire) produit;
             pstmt.setString(4, pa.getDateExpiration());
             pstmt.setString(5, pa.getOrigine());
             pstmt.setNull(6, Types.VARCHAR);
             pstmt.setNull(7, Types.VARCHAR);
             pstmt.setNull(8, Types.VARCHAR);
             pstmt.setNull(9, Types.BOOLEAN);
-        } else if (produit instanceof ProduitMenager pm) {
+        } else if (produit instanceof ProduitMenager) {
+            ProduitMenager pm = (ProduitMenager) produit;
             pstmt.setNull(4, Types.VARCHAR);
             pstmt.setNull(5, Types.VARCHAR);
             pstmt.setString(6, pm.getTypeProduit());
             pstmt.setString(7, pm.getDateFabrication());
             pstmt.setNull(8, Types.VARCHAR);
             pstmt.setNull(9, Types.BOOLEAN);
-        } else if (produit instanceof ProduitCosmetique pc) {
+        } else if (produit instanceof ProduitCosmetique) {
+            ProduitCosmetique pc = (ProduitCosmetique) produit;
             pstmt.setNull(4, Types.VARCHAR);
             pstmt.setNull(5, Types.VARCHAR);
             pstmt.setNull(6, Types.VARCHAR);
