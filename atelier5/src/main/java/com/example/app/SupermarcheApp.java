@@ -4,11 +4,11 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-
+import com.example.service.DatabaseManager;
 import com.example.service.JsonManager;
 import com.example.user.*;
 public class SupermarcheApp {
-    private static List<Produit> produits = JsonManager.chargerProduits();
+    private static List<Produit> produits = DatabaseManager.chargerProduits();
     private static Scanner scanner = new Scanner(System.in);
     private static UserRole userRole = new UserRole();
 
@@ -116,6 +116,7 @@ public class SupermarcheApp {
                 return;
         }
         produits.add(produit);
+        DatabaseManager.ajouterProduit(produit);
         System.out.println("Produit ajouté avec succès !");
     }catch(InputMismatchException e){
         System.out.println("Erreur : entrée invalide. veuillez réessayer");
@@ -159,6 +160,7 @@ public class SupermarcheApp {
                     return;
                 }
                 produit.setQuantite(produit.quantite);
+                DatabaseManager.modifierProduit(produit);
                 System.out.println("Produit modifié avec succès !");
                 return;
             }
@@ -172,6 +174,7 @@ public class SupermarcheApp {
         System.out.print("Entrez l'ID du produit à supprimer : ");
         int id = scanner.nextInt();
         boolean produitSupprime = produits.removeIf(produit -> produit.getId() == id);
+        DatabaseManager.supprimerProduit(id);
 
         if(produitSupprime){
             System.out.println("produit supprimé avec succès !");

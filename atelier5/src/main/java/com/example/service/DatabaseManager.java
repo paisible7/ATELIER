@@ -74,4 +74,114 @@ public class DatabaseManager {
                         rslt.getInt("quantite"));
         }
     }
+
+    public static void ajouterProduit(Produit produit) {
+        String sql = "INSERT INTO produits (id, nom, prix, quantite, type, "
+                + "date_expiration, origine, type_menager, date_fabrication, type_peau, teste_sur_animaux) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            setCommonParameters(pstmt, produit);
+            setTypeSpecificParameters(pstmt, produit);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void setCommonParameters(PreparedStatement pstmt, Produit produit) throws SQLException {
+        pstmt.setInt(1, produit.getId());
+        pstmt.setString(2, produit.getNom());
+        pstmt.setDouble(3, produit.getPrix());
+        pstmt.setInt(4, produit.getQuantite());
+    }
+
+    private static void setTypeSpecificParameters(PreparedStatement pstmt, Produit produit) throws SQLException {
+        if (produit instanceof ProduitAlimentaire pa) {
+            pstmt.setString(5, "alimentaire");
+            pstmt.setString(6, pa.getDateExpiration());
+            pstmt.setString(7, pa.getOrigine());
+            pstmt.setNull(8, Types.VARCHAR);
+            pstmt.setNull(9, Types.VARCHAR);
+            pstmt.setNull(10, Types.VARCHAR);
+            pstmt.setNull(11, Types.BOOLEAN);
+        } else if (produit instanceof ProduitMenager pm) {
+            pstmt.setString(5, "ménager");
+            pstmt.setNull(6, Types.VARCHAR);
+            pstmt.setNull(7, Types.VARCHAR);
+            pstmt.setString(8, pm.getTypeProduit());
+            pstmt.setString(9, pm.getDateFabrication());
+            pstmt.setNull(10, Types.VARCHAR);
+            pstmt.setNull(11, Types.BOOLEAN);
+        } else if (produit instanceof ProduitCosmetique pc) {
+            pstmt.setString(5, "cosmétique");
+            pstmt.setNull(6, Types.VARCHAR);
+            pstmt.setNull(7, Types.VARCHAR);
+            pstmt.setNull(8, Types.VARCHAR);
+            pstmt.setNull(9, Types.VARCHAR);
+            pstmt.setString(10, pc.getTypePeau());
+            pstmt.setBoolean(11, pc.getTesteSurAnimaux());
+        }
+    }
+
+    public static void modifierProduit(Produit produit) {
+        String sql = "UPDATE produits SET nom = ?, prix = ?, quantite = ?, "
+                + "date_expiration = ?, origine = ?, type_menager = ?, date_fabrication = ?, "
+                + "type_peau = ?, teste_sur_animaux = ? WHERE id = ?";
+
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            setUpdateParameters(pstmt, produit);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void setUpdateParameters(PreparedStatement pstmt, Produit produit) throws SQLException {
+        pstmt.setString(1, produit.getNom());
+        pstmt.setDouble(2, produit.getPrix());
+        pstmt.setInt(3, produit.getQuantite());
+
+        if (produit instanceof ProduitAlimentaire pa) {
+            pstmt.setString(4, pa.getDateExpiration());
+            pstmt.setString(5, pa.getOrigine());
+            pstmt.setNull(6, Types.VARCHAR);
+            pstmt.setNull(7, Types.VARCHAR);
+            pstmt.setNull(8, Types.VARCHAR);
+            pstmt.setNull(9, Types.BOOLEAN);
+        } else if (produit instanceof ProduitMenager pm) {
+            pstmt.setNull(4, Types.VARCHAR);
+            pstmt.setNull(5, Types.VARCHAR);
+            pstmt.setString(6, pm.getTypeProduit());
+            pstmt.setString(7, pm.getDateFabrication());
+            pstmt.setNull(8, Types.VARCHAR);
+            pstmt.setNull(9, Types.BOOLEAN);
+        } else if (produit instanceof ProduitCosmetique pc) {
+            pstmt.setNull(4, Types.VARCHAR);
+            pstmt.setNull(5, Types.VARCHAR);
+            pstmt.setNull(6, Types.VARCHAR);
+            pstmt.setNull(7, Types.VARCHAR);
+            pstmt.setString(8, pc.getTypePeau());
+            pstmt.setBoolean(9, pc.getTesteSurAnimaux());
+        }
+        pstmt.setInt(10, produit.getId());
+    }
+
+    public static void supprimerProduit(int id) {
+        String sql = "DELETE FROM produits WHERE id = ?";
+
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
